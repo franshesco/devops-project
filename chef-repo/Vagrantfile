@@ -11,4 +11,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--cpus", 4]
   end
+
+  config.vm.provision "shell", inline: "cd /vagrant/chef-repo; make install-chef-client"
+  config.vm.provision "chef_solo" do |chef|
+	chef.cookbooks_path = ["chef-repo/site-cookbooks", "chef-repo/cookbooks"]
+	chef.add_recipe "factorialapp"
+  end
 end
